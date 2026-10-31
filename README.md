@@ -96,8 +96,10 @@ A real run against an `opensuse/tumbleweed` container:
 |-------|--------|
 | `opensuse/tumbleweed` 20261028 | Upgrade, unused-package removal, cache clean, reboot check and stale-process check all completed |
 
-The container shares the host kernel, so `zypper needs-rebooting` correctly
-reported a reboot as required after the upgrade.
+`zypper needs-rebooting` returned 0 (no reboot) in the container. The script
+maps zypper's exit code 102 to "Reboot required" and any other non-zero code to
+an explicit "could not determine" warning, so a broken check is never reported
+as a clean result.
 
 ## License
 

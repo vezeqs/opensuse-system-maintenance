@@ -178,10 +178,16 @@ run zypper --non-interactive clean --all
 
 if (( DRY_RUN )); then
   info "==> Dry run, skipping the reboot check"
-elif zypper --non-interactive needs-rebooting >/dev/null 2>&1; then
-  warn "==> Reboot required."
 else
-  ok "==> No reboot required."
+  rc=0
+  zypper --non-interactive needs-rebooting >/dev/null 2>&1 || rc=$?
+  if (( rc == 0 )); then
+    ok "==> No reboot required."
+  elif (( rc == 102 )); then
+    warn "==> Reboot required."
+  else
+    warn "==> Could not determine the reboot state (zypper exit $rc)"
+  fi
 fi
 
 info "==> Checking for services that need a restart"
