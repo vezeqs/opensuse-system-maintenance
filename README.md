@@ -24,7 +24,7 @@ sudo ./opensuse-system-maintenance.sh
 | 1 | Refresh repositories (3 attempts) | `zypper refresh` |
 | 2 | Show what would change | `zypper list-updates`, `zypper packages --unneeded` |
 | 3 | **Ask for confirmation** | `Proceed? [y/N]` |
-| 4 | Verify installed dependencies | `zypper verify` |
+| 4 | Verify (and repair) installed dependencies | `zypper verify` |
 | 5 | Upgrade everything | `zypper dup --allow-vendor-change` (Tumbleweed) or `zypper update` (Leap) |
 | 6 | Remove unused packages and their deps | `zypper remove --clean-deps` |
 | 7 | Clean the package cache | `zypper clean --all` |
@@ -100,6 +100,29 @@ A real run against an `opensuse/tumbleweed` container:
 maps zypper's exit code 102 to "Reboot required" and any other non-zero code to
 an explicit "could not determine" warning, so a broken check is never reported
 as a clean result.
+
+## Verify it yourself
+
+```bash
+make check
+```
+
+`make check` runs `bash -n`, shellcheck when installed, the smoke tests, the
+reboot-exit-code and table-parser regression tests and the asset check. The
+screenshots come from a real `opensuse/tumbleweed` container:
+
+```bash
+podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
+  bash /repo/opensuse-system-maintenance.sh --dry-run
+```
+
+## Limits
+
+- It does not roll back; use Snapper for that.
+- It does not upgrade Leap from one release to the next.
+- It does not pin vendors or manage third-party repositories.
+- It was tested on Tumbleweed. The Leap branch is the same code with
+  `zypper update`, but it was not run end to end.
 
 ## License
 
