@@ -68,3 +68,9 @@ them.
 
 **Fix:** added "Verify it yourself" and "Limits".
 **Status:** fixed, test `tests/docs.sh`.
+
+## Post-audit verification
+
+- `opensuse/leap:15.6` run: mode Leap, `zypper update`, `needs-rebooting`
+  returned 0, `zypper ps -s` was clean, exit 0.
+- `opensuse/tumbleweed` run: mode Tumbleweed, `zypper dup`, same checks.

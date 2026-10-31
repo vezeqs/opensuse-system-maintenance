@@ -50,7 +50,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
   That is expected on Tumbleweed with Packman, and the README says so.
 - `zypper ps -s` table rows start with a PID; the stale-process check relies on
   that.
-- Leap was not run end to end; it uses the same code with `zypper update`.
+- Leap 15.6 was run end to end; its container was up to date, so the update was
+  a no-op.
 
 ## Definition of done
 

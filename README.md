@@ -95,6 +95,7 @@ A real run against an `opensuse/tumbleweed` container:
 | Image | Result |
 |-------|--------|
 | `opensuse/tumbleweed` 20261028 | Upgrade, unused-package removal, cache clean, reboot check and stale-process check all completed |
+| `opensuse/leap:15.6` | Leap branch: `zypper update`, reboot check, stale-process check |
 
 `zypper needs-rebooting` returned 0 (no reboot) in the container. The script
 maps zypper's exit code 102 to "Reboot required" and any other non-zero code to
@@ -121,8 +122,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
 - It does not roll back; use Snapper for that.
 - It does not upgrade Leap from one release to the next.
 - It does not pin vendors or manage third-party repositories.
-- It was tested on Tumbleweed. The Leap branch is the same code with
-  `zypper update`, but it was not run end to end.
+- Tumbleweed and Leap 15.6 were both run. The Leap container was up to date, so
+  its update was a no-op.
 
 ## License
 
