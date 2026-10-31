@@ -109,19 +109,28 @@ info "==> Checking what would change"
 if (( DRY_RUN )); then
   info "==> Dry run, skipping the preview queries"
 else
-  preview=$(zypper --non-interactive list-updates 2>/dev/null || true)
-  updates=$(grep -E '^[[:space:]]*[a-zA-Z][[:space:]]*\|' <<<"$preview" | cut -d'|' -f3 | sed 's/^ *//; s/ *$//' | grep -v '^Name$' | grep -v '^$' || true)
-  upgrades=$(grep -c . <<<"$updates" || true)
-  info "==> Packages to upgrade: ${PURPLE}${upgrades}${NC}"
-  if (( upgrades > 0 )); then
-    head -10 <<<"$updates" | sed 's/^/    /'
-    if (( upgrades > 10 )); then
-      info "==> ... and $((upgrades - 10)) more"
+  rc=0
+  preview=$(zypper --non-interactive list-updates 2>/dev/null) || rc=$?
+  if (( rc == 0 )); then
+    updates=$(grep -E '^[[:space:]]*[a-zA-Z][[:space:]]*\|' <<<"$preview" | cut -d'|' -f3 | sed 's/^ *//; s/ *$//' | grep -v '^Name$' | grep -v '^$' || true)
+    upgrades=$(grep -c . <<<"$updates" || true)
+    info "==> Packages to upgrade: ${PURPLE}${upgrades}${NC}"
+    if (( upgrades > 0 )); then
+      head -10 <<<"$updates" | sed 's/^/    /'
+      if (( upgrades > 10 )); then
+        info "==> ... and $((upgrades - 10)) more"
+      fi
     fi
+  else
+    warn "==> Could not check for updates (zypper exit $rc)"
+    info "==> The upgrade below still runs"
   fi
 
-  unneeded_raw=$(zypper --non-interactive packages --unneeded 2>/dev/null || true)
-  if grep -q 'No packages found' <<<"$unneeded_raw"; then
+  rc=0
+  unneeded_raw=$(zypper --non-interactive packages --unneeded 2>/dev/null) || rc=$?
+  if (( rc != 0 )); then
+    warn "==> Could not list unused packages (zypper exit $rc)"
+  elif grep -q 'No packages found' <<<"$unneeded_raw"; then
     ok "==> No unused packages"
   else
     unneeded=$(grep -E '^[[:space:]]*[a-zA-Z][[:space:]]*\|' <<<"$unneeded_raw" | cut -d'|' -f3 | sed 's/^ *//; s/ *$//' | grep -v '^Name$' | grep -v '^$' || true)

@@ -17,7 +17,7 @@ make: *** No rule to make target 'check'.  Stop.
 History read: `be4976c` reboot fix, `8213b7b` initial release. Pull requests:
 none. There is no `origin` remote, so `gh pr list` has nothing to read.
 
-Findings: 5 (5 fixed).
+Findings: 6 (6 fixed).
 
 ## F1 — needs-rebooting was inverted (High)
 
@@ -68,6 +68,15 @@ them.
 
 **Fix:** added "Verify it yourself" and "Limits".
 **Status:** fixed, test `tests/docs.sh`.
+
+## F6 — A failed update check is reported as zero (High)
+
+**Claim:** the preview shows how many packages would be upgraded.
+**Evidence:** with a mock `zypper` whose `list-updates` exits 1, the script
+printed "Packages to upgrade: 0".
+**Cause:** `preview=$(... || true)` discarded the exit status.
+**Fix:** check the status and warn when the check fails.
+**Status:** fixed, test `tests/preview_failure.sh`.
 
 ## Post-audit verification
 

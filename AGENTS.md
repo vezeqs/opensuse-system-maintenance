@@ -53,6 +53,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
 - Leap 15.6 was run end to end; its container was up to date, so the update was
   a no-op.
 
+- A failed `zypper list-updates` must be reported, not turned into zero. `tests/preview_failure.sh` pins it.
+
 ## Definition of done
 
 - [ ] `make check` passes.

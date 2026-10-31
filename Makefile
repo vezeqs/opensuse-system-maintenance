@@ -16,3 +16,6 @@ test:
 	bash tests/parser.sh
 	bash tests/docs.sh
 	bash tests/assets.sh
+
+container-test:
+	bash tests/preview_failure.sh

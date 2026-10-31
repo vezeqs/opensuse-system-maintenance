@@ -119,6 +119,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
   bash /repo/opensuse-system-maintenance.sh --dry-run
 ```
 
+`make container-test` runs the preview-failure test (needs podman).
+
 ## Limits
 
 - It does not roll back; use Snapper for that.
