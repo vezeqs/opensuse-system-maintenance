@@ -112,6 +112,8 @@ make check
 reboot-exit-code and table-parser regression tests and the asset check. The
 screenshots come from a real `opensuse/tumbleweed` container:
 
+`tests/assets.sh` also verifies `assets/source.sha256`: if the script changes without regenerating the screenshots, `make check` fails.
+
 ```bash
 podman run --rm -v "$PWD:/repo:ro,Z" opensuse/tumbleweed \
   bash /repo/opensuse-system-maintenance.sh --dry-run
